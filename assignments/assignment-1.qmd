@@ -28,7 +28,7 @@ total_of_numbers_NA <- sum(is.na(polls_us_election_2016))
 total_of_numbers_NA
 ```
 
--   I got help a [website](from%20https://rnotlari.netlify.app/post/2020-10-17-hangi-apply-fonksiyonunu-kullan%C4%B1r%C4%B1z) for using "sapply()"
+-   I got help a [website](https://rnotlari.netlify.app/post/2020-10-17-hangi-apply-fonksiyonunu-kullan%C4%B1r%C4%B1z/) for using "sapply()"
 -   Which are numeric?
 
 ```{r}
