@@ -3,28 +3,24 @@ title: "About Me"
 sidebar: false 
 ---
 
+# Hello there, I am Ahmet OZCAN!..
+
 # Education
 
--   B.S., Industrial Engineering, Hacettepe University, Turkey, 20xx - ongoing.
+-   [Industrial Engineering](https://ie.hacettepe.edu.tr/), Hacettepe University, Turkey, 2021 - ongoing.
 
-# Work Experience
-
-## Employements
-
-1.  Firm xxx, position xx, year xxx
-
-2.  Firm yyy, position yyy, year yyy
+# Experience
 
 ## Internships
 
-1.  Firm aaa, position xx, year xxx
+-   [T.C. Sanayi ve Teknoloji Bakanligi](https://www.sanayi.gov.tr/anasayfa), 16/08/2024 - 13/09/13
 
-2.  Firm bbb, position yyy, year yyy
+## Competencies
 
-# Projects
-
-# Competencies
-
-R, Quarto, Git, Python
+-   R, Quarto, Git, Python
 
 # Hobbies
+
+-   Movie and series, play computer games, reading books and travel.
+
+![](images/shrek.jpg)
