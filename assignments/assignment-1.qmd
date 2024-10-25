@@ -8,9 +8,11 @@ title: "Assignment 1"
 
 # Part B
 
+-   *I got help a [website](https://rnotlari.netlify.app/post/2020-10-17-hangi-apply-fonksiyonunu-kullan%C4%B1r%C4%B1z/) for using "sapply()" and "lapply()". I also got a little help from gpt on the "kable()" function.*
 -   If the package does not open, install the package by (tool\>install package) and try again.
 
 ```{r}
+library(knitr)
 library(dslabs)  
 data("polls_us_election_2016")
 ```
@@ -18,7 +20,7 @@ data("polls_us_election_2016")
 -   The first 10 rows of the data set
 
 ```{r}
-head(polls_us_election_2016, 10)
+kable(head(polls_us_election_2016, 10))
 ```
 
 -   Total number of NA values in the entire data set
@@ -28,29 +30,34 @@ total_of_numbers_NA <- sum(is.na(polls_us_election_2016))
 total_of_numbers_NA
 ```
 
--   I got help a [website](https://rnotlari.netlify.app/post/2020-10-17-hangi-apply-fonksiyonunu-kullan%C4%B1r%C4%B1z/) for using "sapply()"
--   Which are numeric?
-
-```{r}
-numerc_columns <- sapply(polls_us_election_2016, FUN=is.numeric)  
-numerc_columns
-```
-
 -   For numeric columns, replace NA values with my birth year
 
 ```{r}
+numerc_columns <- sapply(polls_us_election_2016, FUN=is.numeric) 
 polls_us_election_2016[numerc_columns] <- lapply(polls_us_election_2016[numerc_columns], function(x) {
   my_birthyear <- 2003
   ifelse(is.na(x), my_birthyear, x)
   })
 ```
 
--   For character or factor columns, replace NA values with my first name.
+-   Replace NA values with my first name for character columns.
 
 ```{r}
-polls_us_election_2016[!numerc_columns] <- sapply(polls_us_election_2016[!numerc_columns], function(y) {  #sapply() da lapply() da denedim
+character_col <- sapply(polls_us_election_2016, FUN=is.character)
+polls_us_election_2016[character_col] <- lapply(polls_us_election_2016[character_col], function(y) {  #sapply() da lapply() da denedim
   my_name <- "Ahmet"
-  ifelse(is.na(y), my_name, y)  
+  ifelse(is.na(y), my_name, y)
+  })
+```
+
+-   Replace NA values with my first name for factor columns.
+
+```{r}
+factor_col <- sapply(polls_us_election_2016, FUN=is.factor)
+polls_us_election_2016[factor_col] <- lapply(polls_us_election_2016[factor_col], function(z) {  #sapply() da lapply() da denedim
+  my_name <- "Ahmet"
+  z <- as.character(z) #got help from gpt on this line
+  ifelse(is.na(z), my_name, z)
   })
 ```
 
@@ -63,7 +70,7 @@ new_object <- polls_us_election_2016
 -   The first 10 rows of the new data frame and the total number of NAs remaining in the new data frame.
 
 ```{r}
-head(new_object, 10)
+kable(head(new_object, 10))
 ```
 
 -   The total number of NAsremaining in the new data frame.
