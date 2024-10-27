@@ -246,8 +246,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="part-a" class="level1">
 <h1>Part A</h1>
 <ul>
-<li>Unavailable for now</li>
+<li><strong>SUMMARY</strong></li>
 </ul>
+<p>After completing his undergraduate and graduate studies, Baykal Hafizoglu went to Arizona State University for his Ph. After receiving his PhD degree, he continued his career as an expert in management research in the United States. He has worked in operations research and optimization for several companies in the US and is currently working as a director of platform management for a large company. He says that university courses provide students with useful foundational knowledge in analytics. For example, a statistics course teaches diagnostic analysis through hypothesis testing, while regression forecasting provides an introduction to predictive analysis. He talks about optimization projects he has carried out in the past in various industries. These projects have been in areas such as supply chain management, cost optimization and pricing. Students are advised to develop their mathematical modeling and coding skills, as well as learn about data structures and basic algorithms in programming languages such as Python. It emphasizes the importance of being prepared for potential questions in recruitment processes and the ability to effectively define a project from start to finish. Drawing attention to the business opportunities in analytics and optimization in Turkey, he points out that these sectors are developing rapidly and that small businesses in particular need to learn about data science, optimization and operations research.</p>
+<ul>
+<li><strong>QUESTION - 1 :</strong> Question: Which of the following is a method used for scaling numerical data in a data set?</li>
+</ul>
+<ol type="A">
+<li>Averaging</li>
+<li><a href="https://youtu.be/hvL1339luv0?si=IL44jfFzLDaYstcY"><strong>Min-Max Scaling</strong></a></li>
+<li>Converting categorical data to numerical</li>
+<li>Delete missing values in the data set</li>
+</ol>
+<ul>
+<li><strong>QUESTION - 2 :</strong> In the data preprocessing stage, what are two common methods used to convert categorical data into numerical values?</li>
+</ul>
+<p><strong>Answer</strong> is Label Encoding and One-Hot Encoding</p>
 </section>
 <section id="part-b" class="level1">
 <h1>Part B</h1>
@@ -503,7 +517,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>character_col <span class="ot">&lt;-</span> <span class="fu">sapply</span>(polls_us_election_2016, <span class="at">FUN=</span>is.character)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>polls_us_election_2016[character_col] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(polls_us_election_2016[character_col], <span class="cf">function</span>(y) {  <span class="co">#sapply() da lapply() da denedim</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>polls_us_election_2016[character_col] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(polls_us_election_2016[character_col], <span class="cf">function</span>(y) {  </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  my_name <span class="ot">&lt;-</span> <span class="st">"Ahmet"</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(<span class="fu">is.na</span>(y), my_name, y)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -513,7 +527,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>factor_col <span class="ot">&lt;-</span> <span class="fu">sapply</span>(polls_us_election_2016, <span class="at">FUN=</span>is.factor)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>polls_us_election_2016[factor_col] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(polls_us_election_2016[factor_col], <span class="cf">function</span>(z) {  <span class="co">#sapply() da lapply() da denedim</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>polls_us_election_2016[factor_col] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(polls_us_election_2016[factor_col], <span class="cf">function</span>(z) {  </span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  my_name <span class="ot">&lt;-</span> <span class="st">"Ahmet"</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">&lt;-</span> <span class="fu">as.character</span>(z) <span class="co">#got help from gpt on this line</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(<span class="fu">is.na</span>(z), my_name, z)</span>

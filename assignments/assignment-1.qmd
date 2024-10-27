@@ -4,12 +4,25 @@ title: "Assignment 1"
 
 # Part A
 
--   Unavailable for now
+-   **SUMMARY**
+
+After completing his undergraduate and graduate studies, Baykal Hafizoglu went to Arizona State University for his Ph. After receiving his PhD degree, he continued his career as an expert in management research in the United States. He has worked in operations research and optimization for several companies in the US and is currently working as a director of platform management for a large company. He says that university courses provide students with useful foundational knowledge in analytics. For example, a statistics course teaches diagnostic analysis through hypothesis testing, while regression forecasting provides an introduction to predictive analysis. He talks about optimization projects he has carried out in the past in various industries. These projects have been in areas such as supply chain management, cost optimization and pricing. Students are advised to develop their mathematical modeling and coding skills, as well as learn about data structures and basic algorithms in programming languages such as Python. It emphasizes the importance of being prepared for potential questions in recruitment processes and the ability to effectively define a project from start to finish. Drawing attention to the business opportunities in analytics and optimization in Turkey, he points out that these sectors are developing rapidly and that small businesses in particular need to learn about data science, optimization and operations research.
+
+-   **QUESTION - 1 :** Question: Which of the following is a method used for scaling numerical data in a data set?
+
+A)  Averaging
+B)  [**Min-Max Scaling**](https://youtu.be/hvL1339luv0?si=IL44jfFzLDaYstcY)
+C)  Converting categorical data to numerical
+D)  Delete missing values in the data set
+
+-   **QUESTION - 2 :** In the data preprocessing stage, what are two common methods used to convert categorical data into numerical values?
+
+**Answer** is Label Encoding and One-Hot Encoding
 
 # Part B
 
 -   *I got help a [website](https://rnotlari.netlify.app/post/2020-10-17-hangi-apply-fonksiyonunu-kullan%C4%B1r%C4%B1z/) for using "sapply()" and "lapply()". I also got a little help from gpt on the "kable()" function.*
--   If the package does not open, install the package by (tool\>install package) and try again.
+-   If the package does not open, install the package by (tool>install package) and try again.
 
 ```{r}
 library(knitr)
@@ -44,7 +57,7 @@ polls_us_election_2016[numerc_columns] <- lapply(polls_us_election_2016[numerc_c
 
 ```{r}
 character_col <- sapply(polls_us_election_2016, FUN=is.character)
-polls_us_election_2016[character_col] <- lapply(polls_us_election_2016[character_col], function(y) {  #sapply() da lapply() da denedim
+polls_us_election_2016[character_col] <- lapply(polls_us_election_2016[character_col], function(y) {  
   my_name <- "Ahmet"
   ifelse(is.na(y), my_name, y)
   })
@@ -54,7 +67,7 @@ polls_us_election_2016[character_col] <- lapply(polls_us_election_2016[character
 
 ```{r}
 factor_col <- sapply(polls_us_election_2016, FUN=is.factor)
-polls_us_election_2016[factor_col] <- lapply(polls_us_election_2016[factor_col], function(z) {  #sapply() da lapply() da denedim
+polls_us_election_2016[factor_col] <- lapply(polls_us_election_2016[factor_col], function(z) {  
   my_name <- "Ahmet"
   z <- as.character(z) #got help from gpt on this line
   ifelse(is.na(z), my_name, z)

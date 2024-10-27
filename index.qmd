@@ -11,4 +11,4 @@ Please stay tuned to follow my works on data analytics, blog posts, and more.
 
 This is our template.
 
-![](images/indir (1)-01.jpg)
+![](images/indir%20(1)-01.jpg)
