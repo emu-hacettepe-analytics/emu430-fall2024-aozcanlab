@@ -3,8 +3,7 @@ title: "Welcome to My Analytics Lab"
 sidebar: false 
 format: 
   html:
-    theme:
-        primary: "#3498db"
+    css: shrek-theme.css
 ---
 
 Hello! My name is Ahmet OCZAN..!

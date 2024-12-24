@@ -1,6 +1,7 @@
 ---
 title: "My Blog"
 sidebar: false 
+css: shrek-theme.css
 ---
 
 This page is under construction.

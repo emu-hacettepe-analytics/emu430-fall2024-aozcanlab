@@ -1,11 +1,26 @@
 ---
 title: "About Me"
 sidebar: false 
+css: shrek-theme.css
 ---
 
 # Hello there, I am Ahmet OZCAN!..
+<style>
+  .button {
+    padding: 7px 18px;
+    border: 1px solid #543636;
+    text-decoration: none;
+    color: #543636;
+    border-radius: 5px;
+  }
+</style>
 
-Click for [**MyCV**](https://drive.google.com/file/d/1CEk8TyRbI7p7umBMnDCj9fkqFDc-7tW2/view?usp=sharing)
+<div>
+
+1.  <a href=https://drive.google.com/file/d/1CEk8TyRbI7p7umBMnDCj9fkqFDc-7tW2/view?usp=sharing" class="button">Click for **MyCV**</a>
+
+</div>
+
 
 # Education
 
