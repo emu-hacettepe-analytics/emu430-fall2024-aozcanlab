@@ -1,6 +1,10 @@
 ---
 title: "Welcome to My Analytics Lab"
 sidebar: false 
+format: 
+  html:
+    theme:
+        primary: "#3498db"
 ---
 
 Hello! My name is Ahmet OCZAN..!

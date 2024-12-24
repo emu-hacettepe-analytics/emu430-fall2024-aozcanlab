@@ -41,14 +41,11 @@ website:
   page-footer:
     center: "Hacettepe IE - EMU430 - 2024 Fall" 
     border: true
+
 format:
   html:
-    toc: true
-    toc-location: left
-    theme: 
-      light: pulse 
-      dark: superhero
-    css: styles.css
+    theme: flatly
+    css: shrek-theme.css
 
 
 editor: visual

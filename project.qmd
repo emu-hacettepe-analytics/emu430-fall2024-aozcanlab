@@ -3,10 +3,32 @@ title: "Our Course Project"
 sidebar: false 
 ---
 
-I'm honored to be a member of the \[group name\] project team.
 
-Below, you'll find a brief summary of our project. To access a detailed project description, please go to [https://\[your-project-url\]](#0){.uri}.
+I'm honored to be a member of the eneRgytics project team.
+
+Below, you'll find a brief summary of our project. 
+
+<style>
+  .button {
+    padding: 7px 18px;
+    border: 1px solid #brown;
+    text-decoration: none;
+    color: #blacl;
+    border-radius: 5px;
+  }
+</style>
+
+<div>
+
+<a href=https://emu-hacettepe-analytics.github.io/emu430-fall2024-team-eneRgytics/" class="button">To access a detailed project description, please click here.</a>
+
+</div>
 
 **Summary**
 
 \[provide a biref summary of your project\]
+
+
+
+
+

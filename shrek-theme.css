@@ -1,0 +1,48 @@
+/* css styles */
+body {
+  background-color: #ffefd5; 
+  color: #523213; 
+  font-family: "Comic Sans MS", "Arial", sans-serif; 
+}
+
+h1, h2, h3 {
+  color: #FFD700; 
+  text-shadow: 2px 2px 4px #000000; 
+}
+
+a {
+  color: #2E8B57; 
+  text-decoration: none;
+}
+a:hover {
+  color: #FFD700; 
+}
+
+code {
+  background-color: #A9A9A9; 
+  color: #000000;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-family: "Courier New", monospace;
+}
+
+footer {
+  background-color: #556B2F; 
+  color: #523213;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 12px;
+}
+
+button {
+  background-color: #FFD700;
+  color: #000000;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #6B8E23; 
+}
+
