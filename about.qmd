@@ -1,10 +1,9 @@
 ---
-title: "About Me"
-sidebar: false 
-css: shrek-theme.css
+title: "home"
 ---
 
 # Hello there, I am Ahmet OZCAN!..
+
 <style>
   .button {
     padding: 7px 18px;
@@ -20,7 +19,6 @@ css: shrek-theme.css
 1.  <a href=https://drive.google.com/file/d/1CEk8TyRbI7p7umBMnDCj9fkqFDc-7tW2/view?usp=sharing" class="button">Click for **MyCV**</a>
 
 </div>
-
 
 # Education
 

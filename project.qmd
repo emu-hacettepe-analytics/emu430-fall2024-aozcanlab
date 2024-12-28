@@ -26,7 +26,7 @@ Below, you'll find a brief summary of our project.
 
 **Summary**
 
-\[provide a biref summary of your project\]
+One of the main goals of the permanent daylight saving time application, which was implemented in 2016, was to save electricity. As shown by our analysis based on data from TURKSTAT, this application, used since 2016, indicates that no savings in electricity consumption were achieved until 2021. Moreover, as shown in the graphs, it can also be said that regions with a steady trend or a decreasing trend in electricity consumption experienced an increase.
 
 
 

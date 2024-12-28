@@ -1,7 +1,8 @@
 ---
 title: "My Blog"
 sidebar: false 
-css: shrek-theme.css
 ---
+Welcome! This is our project webpage.
 
-This page is under construction.
+Please stay tuned to follow our project activities.
+
