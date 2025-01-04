@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -196,8 +230,860 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="library-preparation" class="level1">
+<h1>Library Preparation</h1>
+</section>
+<section id="create-url" class="level1">
+<h1>Create URL</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>url1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"https://m.imdb.com/search/title/?title_type=feature&amp;release_date=2010-01-01,&amp;num_votes=2500,&amp;country_of_origin=TR&amp;count=250"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>url2 <span class="ot">&lt;-</span> <span class="st">"https://m.imdb.com/search/title/?title_type=feature&amp;release_date=2010-01-01,2024-12-31&amp;num_votes=2499,&amp;country_of_origin=TR&amp;count=250"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>page1 <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url1)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>page2 <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="html_nodes-and-html_text" class="level1">
+<h1>html_nodes and html_text</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>titles1 <span class="ot">&lt;-</span> page1 <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">".ipc-title__text"</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>titles2 <span class="ot">&lt;-</span> page2 <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">".ipc-title__text"</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>()</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>titles1 <span class="ot">&lt;-</span> page1 <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">".dli-title"</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>()</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>titles2 <span class="ot">&lt;-</span> page2 <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">".dli-title"</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>()</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>years1 <span class="ot">&lt;-</span> page1 <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">".dli-title-metadata-item:nth-child(1)"</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>()</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>years2 <span class="ot">&lt;-</span> page2 <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">".dli-title-metadata-item:nth-child(1)"</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>()</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>durations1 <span class="ot">&lt;-</span> page1 <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">".dli-title-metadata-item:nth-child(2)"</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>()</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>durations2 <span class="ot">&lt;-</span> page2 <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">".dli-title-metadata-item:nth-child(2)"</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>()</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>ratings1 <span class="ot">&lt;-</span> page1 <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">".ratingGroup--imdb-rating"</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>()</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>ratings2 <span class="ot">&lt;-</span> page2 <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">".ratingGroup--imdb-rating"</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>()</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>votes1 <span class="ot">&lt;-</span> page1 <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">".ipc-rating-star--voteCount"</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>()</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>votes2 <span class="ot">&lt;-</span> page2 <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">".ipc-rating-star--voteCount"</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>()</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>combined_titles <span class="ot">&lt;-</span> <span class="fu">c</span>(titles1, titles2)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>combined_years <span class="ot">&lt;-</span> <span class="fu">c</span>(years1, years2)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>combined_durations <span class="ot">&lt;-</span> <span class="fu">c</span>(durations1, durations2)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>combined_ratings <span class="ot">&lt;-</span> <span class="fu">c</span>(ratings1, ratings2)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>combined_votes <span class="ot">&lt;-</span> <span class="fu">c</span>(votes1, votes2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="outputs" class="level1">
+<h1>Outputs</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>combined_titles</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "1. Kuru Otlar Üstüne"        "2. Yedinci Kogustaki Mucize"
+ [3] "3. Baskin"                   "4. Kis Uykusu"              
+ [5] "5. Cebimdeki Yabanci"        "6. Ayla"                    
+ [7] "7. Bir Zamanlar Anadolu'da"  "8. Mavi Magara"             
+ [9] "9. Erdal ile Ece"            "10. Ahlat Agaci"            
+[11] "11. Istanbul Için Son Çagri" "12. Dag II"                 
+[13] "13. Kurak Günler"            "14. Dabbe: Cin Çarpmasi"    
+[15] "15. Mucize"                  "16. Bihter"                 
+[17] "17. Siccîn"                  "18. Ölümlü Dünya 2"         
+[19] "19. Ölümlü Dünya"            "20. Kedi"                   
+[21] "21. The Ottoman Lieutenant"  "22. Dag"                    
+[23] "23. Av Mevsimi"              "24. Do Not Disturb"         
+[25] "25. Okul Tirasi"             "1. Kuru Otlar Üstüne"       
+[27] "2. Yedinci Kogustaki Mucize" "3. Baskin"                  
+[29] "4. Kis Uykusu"               "5. Cebimdeki Yabanci"       
+[31] "6. Ayla"                     "7. Bir Zamanlar Anadolu'da" 
+[33] "8. Mavi Magara"              "9. Erdal ile Ece"           
+[35] "10. Ahlat Agaci"             "11. Istanbul Için Son Çagri"
+[37] "12. Dag II"                  "13. Kurak Günler"           
+[39] "14. Dabbe: Cin Çarpmasi"     "15. Mucize"                 
+[41] "16. Bihter"                  "17. Siccîn"                 
+[43] "18. Ölümlü Dünya 2"          "19. Ölümlü Dünya"           
+[45] "20. Kedi"                    "21. The Ottoman Lieutenant" 
+[47] "22. Dag"                     "23. Av Mevsimi"             
+[49] "24. Do Not Disturb"          "25. Okul Tirasi"            </code></pre>
+</div>
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>combined_years</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "2023" "2019" "2015" "2014" "2018" "2017" "2011" "2024" "2024" "2018"
+[11] "2023" "2016" "2022" "2013" "2015" "2023" "2014" "2023" "2018" "2016"
+[21] "2017" "2012" "2010" "2023" "2021" "2023" "2019" "2015" "2014" "2018"
+[31] "2017" "2011" "2024" "2024" "2018" "2023" "2016" "2022" "2013" "2015"
+[41] "2023" "2014" "2023" "2018" "2016" "2017" "2012" "2010" "2023" "2021"</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>combined_durations</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "3h 17m" "2h 12m" "1h 37m" "3h 16m" "1h 35m" "2h 5m"  "2h 37m" "1h 28m"
+ [9] "1h 47m" "3h 8m"  "1h 31m" "2h 15m" "2h 9m"  "2h 14m" "2h 16m" "1h 53m"
+[17] "1h 36m" "1h 57m" "1h 47m" "1h 19m" "1h 46m" "1h 30m" "2h 20m" "1h 54m"
+[25] "1h 25m" "3h 17m" "2h 12m" "1h 37m" "3h 16m" "1h 35m" "2h 5m"  "2h 37m"
+[33] "1h 28m" "1h 47m" "3h 8m"  "1h 31m" "2h 15m" "2h 9m"  "2h 14m" "2h 16m"
+[41] "1h 53m" "1h 36m" "1h 57m" "1h 47m" "1h 19m" "1h 46m" "1h 30m" "2h 20m"
+[49] "1h 54m" "1h 25m"</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>combined_ratings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "7.7&nbsp;(16K)"  "8.2&nbsp;(58K)"  "5.8&nbsp;(13K)"  "8.0&nbsp;(57K)"  "6.8&nbsp;(10K)" 
+ [6] "8.2&nbsp;(45K)"  "7.8&nbsp;(52K)"  "5.4&nbsp;(4.7K)" "4.3&nbsp;(4K)"   "8.0&nbsp;(29K)" 
+[11] "5.3&nbsp;(9.6K)" "8.2&nbsp;(111K)" "7.5&nbsp;(13K)"  "6.8&nbsp;(7.9K)" "7.6&nbsp;(15K)" 
+[16] "3.6&nbsp;(4.1K)" "6.0&nbsp;(5.7K)" "6.8&nbsp;(9.7K)" "7.6&nbsp;(33K)"  "7.6&nbsp;(16K)" 
+[21] "6.4&nbsp;(27K)"  "7.5&nbsp;(24K)"  "7.4&nbsp;(38K)"  "6.3&nbsp;(11K)"  "7.3&nbsp;(3.5K)"
+[26] "7.7&nbsp;(16K)"  "8.2&nbsp;(58K)"  "5.8&nbsp;(13K)"  "8.0&nbsp;(57K)"  "6.8&nbsp;(10K)" 
+[31] "8.2&nbsp;(45K)"  "7.8&nbsp;(52K)"  "5.4&nbsp;(4.7K)" "4.3&nbsp;(4K)"   "8.0&nbsp;(29K)" 
+[36] "5.3&nbsp;(9.6K)" "8.2&nbsp;(111K)" "7.5&nbsp;(13K)"  "6.8&nbsp;(7.9K)" "7.6&nbsp;(15K)" 
+[41] "3.6&nbsp;(4.1K)" "6.0&nbsp;(5.7K)" "6.8&nbsp;(9.7K)" "7.6&nbsp;(33K)"  "7.6&nbsp;(16K)" 
+[46] "6.4&nbsp;(27K)"  "7.5&nbsp;(24K)"  "7.4&nbsp;(38K)"  "6.3&nbsp;(11K)"  "7.3&nbsp;(3.5K)"</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>combined_votes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "&nbsp;(16K)"  "&nbsp;(58K)"  "&nbsp;(13K)"  "&nbsp;(57K)"  "&nbsp;(10K)"  "&nbsp;(45K)"  "&nbsp;(52K)" 
+ [8] "&nbsp;(4.7K)" "&nbsp;(4K)"   "&nbsp;(29K)"  "&nbsp;(9.6K)" "&nbsp;(111K)" "&nbsp;(13K)"  "&nbsp;(7.9K)"
+[15] "&nbsp;(15K)"  "&nbsp;(4.1K)" "&nbsp;(5.7K)" "&nbsp;(9.7K)" "&nbsp;(33K)"  "&nbsp;(16K)"  "&nbsp;(27K)" 
+[22] "&nbsp;(24K)"  "&nbsp;(38K)"  "&nbsp;(11K)"  "&nbsp;(3.5K)" "&nbsp;(16K)"  "&nbsp;(58K)"  "&nbsp;(13K)" 
+[29] "&nbsp;(57K)"  "&nbsp;(10K)"  "&nbsp;(45K)"  "&nbsp;(52K)"  "&nbsp;(4.7K)" "&nbsp;(4K)"   "&nbsp;(29K)" 
+[36] "&nbsp;(9.6K)" "&nbsp;(111K)" "&nbsp;(13K)"  "&nbsp;(7.9K)" "&nbsp;(15K)"  "&nbsp;(4.1K)" "&nbsp;(5.7K)"
+[43] "&nbsp;(9.7K)" "&nbsp;(33K)"  "&nbsp;(16K)"  "&nbsp;(27K)"  "&nbsp;(24K)"  "&nbsp;(38K)"  "&nbsp;(11K)" 
+[50] "&nbsp;(3.5K)"</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>title_names1 <span class="ot">&lt;-</span> page1 <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">'.ipc-title__text'</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>title_names1 <span class="ot">&lt;-</span> <span class="fu">html_text</span>(title_names1)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>title_names1 <span class="ot">&lt;-</span> <span class="fu">tail</span>(<span class="fu">head</span>(title_names1,<span class="sc">-</span><span class="dv">1</span>),<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>title_names1 <span class="ot">&lt;-</span> <span class="fu">str_split</span>(title_names1, <span class="st">" "</span>, <span class="at">n=</span><span class="dv">2</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>title_names1 <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">lapply</span>(title_names1, <span class="cf">function</span>(x) {x[<span class="dv">2</span>]}))</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>title_names2 <span class="ot">&lt;-</span> page2 <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">'.ipc-title__text'</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>title_names2 <span class="ot">&lt;-</span> <span class="fu">html_text</span>(title_names2)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>title_names2 <span class="ot">&lt;-</span> <span class="fu">tail</span>(<span class="fu">head</span>(title_names2,<span class="sc">-</span><span class="dv">1</span>),<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>title_names2 <span class="ot">&lt;-</span> <span class="fu">str_split</span>(title_names2, <span class="st">" "</span>, <span class="at">n=</span><span class="dv">2</span>)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>title_names2 <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">lapply</span>(title_names2, <span class="cf">function</span>(x) {x[<span class="dv">2</span>]}))</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>combined_title_names <span class="ot">&lt;-</span> <span class="fu">c</span>(title_names1, title_names2)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>combined_title_names <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"^[</span><span class="sc">\\</span><span class="st">s]+|</span><span class="sc">\\</span><span class="st">s+$"</span>, <span class="st">""</span>, combined_title_names) <span class="co"># I got help from ChatGDP</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setlocale</span>(<span class="st">"LC_ALL"</span>, <span class="st">"Turkish"</span>) <span class="co"># I got help from ChatGDP</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "LC_COLLATE=Turkish_Türkiye.1254;LC_CTYPE=Turkish_Türkiye.1254;LC_MONETARY=Turkish_Türkiye.1254;LC_NUMERIC=C;LC_TIME=Turkish_Türkiye.1254"</code></pre>
+</div>
+</div>
+</section>
+<section id="for-durations" class="level1">
+<h1>For Durations</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>hours1 <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">str_extract</span>(durations1, <span class="st">"</span><span class="sc">\\</span><span class="st">d+(?=h)"</span>))  </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>minutes1 <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">str_extract</span>(durations1, <span class="st">"</span><span class="sc">\\</span><span class="st">d+(?=m)"</span>))  </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>hours1[<span class="fu">is.na</span>(hours1)] <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="st">"0"</span>)     </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>minutes1[<span class="fu">is.na</span>(minutes1)] <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="st">"0"</span>) </span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>total_duration_minutes1 <span class="ot">&lt;-</span> (hours1 <span class="sc">*</span> <span class="dv">60</span>) <span class="sc">+</span> minutes1</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>hours2 <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">str_extract</span>(durations2, <span class="st">"</span><span class="sc">\\</span><span class="st">d+(?=h)"</span>))</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>minutes2 <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">str_extract</span>(durations2, <span class="st">"</span><span class="sc">\\</span><span class="st">d+(?=m)"</span>))</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>hours2[<span class="fu">is.na</span>(hours2)] <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="st">"0"</span>)</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>minutes2[<span class="fu">is.na</span>(minutes2)] <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="st">"0"</span>)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>total_duration_minutes2 <span class="ot">&lt;-</span> (hours2 <span class="sc">*</span> <span class="dv">60</span>) <span class="sc">+</span> minutes2</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>combined_durations <span class="ot">&lt;-</span> <span class="fu">c</span>(total_duration_minutes1 , total_duration_minutes2)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(combined_durations)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 197 132  97 196  95 125 157  88 107 188  91 135 129 134 136 113  96 117 107
+[20]  79 106  90 140 114  85 197 132  97 196  95 125 157  88 107 188  91 135 129
+[39] 134 136 113  96 117 107  79 106  90 140 114  85</code></pre>
+</div>
+</div>
+</section>
+<section id="for-votes" class="level1">
+<h1>For Votes</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>votes1 <span class="ot">&lt;-</span> page1 <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">".ipc-rating-star--voteCount"</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>()</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>votes2 <span class="ot">&lt;-</span> page2 <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">".ipc-rating-star--voteCount"</span>) <span class="sc">|&gt;</span> <span class="fu">html_text</span>()</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># From ChatGPT :</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>votes1 <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(votes1, <span class="st">"[()]"</span>, <span class="st">""</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>votes2 <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(votes2, <span class="st">"[()]"</span>, <span class="st">""</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># From ChatGPT :</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>votes1 <span class="ot">&lt;-</span> <span class="fu">str_remove_all</span>(votes1, <span class="st">"[^0-9.K]"</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>votes2 <span class="ot">&lt;-</span> <span class="fu">str_remove_all</span>(votes2, <span class="st">"[^0-9.K]"</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>votes_numeric1 <span class="ot">&lt;-</span> <span class="fu">str_remove_all</span>(votes1, <span class="st">"K"</span>) <span class="sc">|&gt;</span> <span class="fu">as.numeric</span>() <span class="sc">*</span> <span class="dv">1000</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>votes_numeric2 <span class="ot">&lt;-</span> <span class="fu">str_remove_all</span>(votes2, <span class="st">"K"</span>) <span class="sc">|&gt;</span> <span class="fu">as.numeric</span>() <span class="sc">*</span> <span class="dv">1000</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>combined_votes <span class="ot">&lt;-</span> <span class="fu">c</span>(votes_numeric1 , votes_numeric2)</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(combined_votes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  16000  58000  13000  57000  10000  45000  52000   4700   4000  29000
+[11]   9600 111000  13000   7900  15000   4100   5700   9700  33000  16000
+[21]  27000  24000  38000  11000   3500  16000  58000  13000  57000  10000
+[31]  45000  52000   4700   4000  29000   9600 111000  13000   7900  15000
+[41]   4100   5700   9700  33000  16000  27000  24000  38000  11000   3500</code></pre>
+</div>
+</div>
+</section>
+<section id="for-ratings" class="level1">
+<h1>For Ratings</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>combined_ratings <span class="ot">&lt;-</span> <span class="fu">c</span>(ratings1, ratings2)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(combined_ratings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "7.7&nbsp;(16K)"  "8.2&nbsp;(58K)"  "5.8&nbsp;(13K)"  "8.0&nbsp;(57K)"  "6.8&nbsp;(10K)" 
+ [6] "8.2&nbsp;(45K)"  "7.8&nbsp;(52K)"  "5.4&nbsp;(4.7K)" "4.3&nbsp;(4K)"   "8.0&nbsp;(29K)" 
+[11] "5.3&nbsp;(9.6K)" "8.2&nbsp;(111K)" "7.5&nbsp;(13K)"  "6.8&nbsp;(7.9K)" "7.6&nbsp;(15K)" 
+[16] "3.6&nbsp;(4.1K)" "6.0&nbsp;(5.7K)" "6.8&nbsp;(9.7K)" "7.6&nbsp;(33K)"  "7.6&nbsp;(16K)" 
+[21] "6.4&nbsp;(27K)"  "7.5&nbsp;(24K)"  "7.4&nbsp;(38K)"  "6.3&nbsp;(11K)"  "7.3&nbsp;(3.5K)"
+[26] "7.7&nbsp;(16K)"  "8.2&nbsp;(58K)"  "5.8&nbsp;(13K)"  "8.0&nbsp;(57K)"  "6.8&nbsp;(10K)" 
+[31] "8.2&nbsp;(45K)"  "7.8&nbsp;(52K)"  "5.4&nbsp;(4.7K)" "4.3&nbsp;(4K)"   "8.0&nbsp;(29K)" 
+[36] "5.3&nbsp;(9.6K)" "8.2&nbsp;(111K)" "7.5&nbsp;(13K)"  "6.8&nbsp;(7.9K)" "7.6&nbsp;(15K)" 
+[41] "3.6&nbsp;(4.1K)" "6.0&nbsp;(5.7K)" "6.8&nbsp;(9.7K)" "7.6&nbsp;(33K)"  "7.6&nbsp;(16K)" 
+[46] "6.4&nbsp;(27K)"  "7.5&nbsp;(24K)"  "7.4&nbsp;(38K)"  "6.3&nbsp;(11K)"  "7.3&nbsp;(3.5K)"</code></pre>
+</div>
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>rating_no_parant1 <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(combined_ratings, <span class="st">"</span><span class="sc">\\</span><span class="st">(.*</span><span class="sc">\\</span><span class="st">)"</span>, <span class="st">""</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>rating_no_parant_no_space <span class="ot">&lt;-</span> <span class="fu">str_trim</span>(<span class="fu">str_extract</span>(rating_no_parant1, <span class="st">"^</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.?</span><span class="sc">\\</span><span class="st">d*"</span>))</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>combined_ratings <span class="ot">&lt;-</span> <span class="fu">as.double</span>(rating_no_parant_no_space)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>combined_ratings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 7.7 8.2 5.8 8.0 6.8 8.2 7.8 5.4 4.3 8.0 5.3 8.2 7.5 6.8 7.6 3.6 6.0 6.8 7.6
+[20] 7.6 6.4 7.5 7.4 6.3 7.3 7.7 8.2 5.8 8.0 6.8 8.2 7.8 5.4 4.3 8.0 5.3 8.2 7.5
+[39] 6.8 7.6 3.6 6.0 6.8 7.6 7.6 6.4 7.5 7.4 6.3 7.3</code></pre>
+</div>
+</div>
+</section>
+<section id="data-frame" class="level1">
+<h1>Data Frame</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>imdb_movies_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Title =</span> combined_title_names, </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">Year =</span> combined_years, </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                               <span class="at">Duration =</span> combined_durations,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                               <span class="at">Rate =</span> combined_ratings,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                               <span class="at">Vote =</span> combined_votes)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(imdb_movies_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Title</th>
+<th style="text-align: left;">Year</th>
+<th style="text-align: right;">Duration</th>
+<th style="text-align: right;">Rate</th>
+<th style="text-align: right;">Vote</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Kuru Otlar Üstüne</td>
+<td style="text-align: left;">2023</td>
+<td style="text-align: right;">197</td>
+<td style="text-align: right;">7.7</td>
+<td style="text-align: right;">16000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Yedinci Kogustaki Mucize</td>
+<td style="text-align: left;">2019</td>
+<td style="text-align: right;">132</td>
+<td style="text-align: right;">8.2</td>
+<td style="text-align: right;">58000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Baskin</td>
+<td style="text-align: left;">2015</td>
+<td style="text-align: right;">97</td>
+<td style="text-align: right;">5.8</td>
+<td style="text-align: right;">13000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Kis Uykusu</td>
+<td style="text-align: left;">2014</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: right;">8.0</td>
+<td style="text-align: right;">57000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Cebimdeki Yabanci</td>
+<td style="text-align: left;">2018</td>
+<td style="text-align: right;">95</td>
+<td style="text-align: right;">6.8</td>
+<td style="text-align: right;">10000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ayla</td>
+<td style="text-align: left;">2017</td>
+<td style="text-align: right;">125</td>
+<td style="text-align: right;">8.2</td>
+<td style="text-align: right;">45000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bir Zamanlar Anadolu’da</td>
+<td style="text-align: left;">2011</td>
+<td style="text-align: right;">157</td>
+<td style="text-align: right;">7.8</td>
+<td style="text-align: right;">52000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mavi Magara</td>
+<td style="text-align: left;">2024</td>
+<td style="text-align: right;">88</td>
+<td style="text-align: right;">5.4</td>
+<td style="text-align: right;">4700</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Erdal ile Ece</td>
+<td style="text-align: left;">2024</td>
+<td style="text-align: right;">107</td>
+<td style="text-align: right;">4.3</td>
+<td style="text-align: right;">4000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ahlat Agaci</td>
+<td style="text-align: left;">2018</td>
+<td style="text-align: right;">188</td>
+<td style="text-align: right;">8.0</td>
+<td style="text-align: right;">29000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Istanbul Için Son Çagri</td>
+<td style="text-align: left;">2023</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: right;">5.3</td>
+<td style="text-align: right;">9600</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Dag II</td>
+<td style="text-align: left;">2016</td>
+<td style="text-align: right;">135</td>
+<td style="text-align: right;">8.2</td>
+<td style="text-align: right;">111000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Kurak Günler</td>
+<td style="text-align: left;">2022</td>
+<td style="text-align: right;">129</td>
+<td style="text-align: right;">7.5</td>
+<td style="text-align: right;">13000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Dabbe: Cin Çarpmasi</td>
+<td style="text-align: left;">2013</td>
+<td style="text-align: right;">134</td>
+<td style="text-align: right;">6.8</td>
+<td style="text-align: right;">7900</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Mucize</td>
+<td style="text-align: left;">2015</td>
+<td style="text-align: right;">136</td>
+<td style="text-align: right;">7.6</td>
+<td style="text-align: right;">15000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bihter</td>
+<td style="text-align: left;">2023</td>
+<td style="text-align: right;">113</td>
+<td style="text-align: right;">3.6</td>
+<td style="text-align: right;">4100</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Siccîn</td>
+<td style="text-align: left;">2014</td>
+<td style="text-align: right;">96</td>
+<td style="text-align: right;">6.0</td>
+<td style="text-align: right;">5700</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ölümlü Dünya 2</td>
+<td style="text-align: left;">2023</td>
+<td style="text-align: right;">117</td>
+<td style="text-align: right;">6.8</td>
+<td style="text-align: right;">9700</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ölümlü Dünya</td>
+<td style="text-align: left;">2018</td>
+<td style="text-align: right;">107</td>
+<td style="text-align: right;">7.6</td>
+<td style="text-align: right;">33000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Kedi</td>
+<td style="text-align: left;">2016</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: right;">7.6</td>
+<td style="text-align: right;">16000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">The Ottoman Lieutenant</td>
+<td style="text-align: left;">2017</td>
+<td style="text-align: right;">106</td>
+<td style="text-align: right;">6.4</td>
+<td style="text-align: right;">27000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Dag</td>
+<td style="text-align: left;">2012</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: right;">7.5</td>
+<td style="text-align: right;">24000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Av Mevsimi</td>
+<td style="text-align: left;">2010</td>
+<td style="text-align: right;">140</td>
+<td style="text-align: right;">7.4</td>
+<td style="text-align: right;">38000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Do Not Disturb</td>
+<td style="text-align: left;">2023</td>
+<td style="text-align: right;">114</td>
+<td style="text-align: right;">6.3</td>
+<td style="text-align: right;">11000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Okul Tirasi</td>
+<td style="text-align: left;">2021</td>
+<td style="text-align: right;">85</td>
+<td style="text-align: right;">7.3</td>
+<td style="text-align: right;">3500</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Kuru Otlar Üstüne</td>
+<td style="text-align: left;">2023</td>
+<td style="text-align: right;">197</td>
+<td style="text-align: right;">7.7</td>
+<td style="text-align: right;">16000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Yedinci Kogustaki Mucize</td>
+<td style="text-align: left;">2019</td>
+<td style="text-align: right;">132</td>
+<td style="text-align: right;">8.2</td>
+<td style="text-align: right;">58000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Baskin</td>
+<td style="text-align: left;">2015</td>
+<td style="text-align: right;">97</td>
+<td style="text-align: right;">5.8</td>
+<td style="text-align: right;">13000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Kis Uykusu</td>
+<td style="text-align: left;">2014</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: right;">8.0</td>
+<td style="text-align: right;">57000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Cebimdeki Yabanci</td>
+<td style="text-align: left;">2018</td>
+<td style="text-align: right;">95</td>
+<td style="text-align: right;">6.8</td>
+<td style="text-align: right;">10000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ayla</td>
+<td style="text-align: left;">2017</td>
+<td style="text-align: right;">125</td>
+<td style="text-align: right;">8.2</td>
+<td style="text-align: right;">45000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bir Zamanlar Anadolu’da</td>
+<td style="text-align: left;">2011</td>
+<td style="text-align: right;">157</td>
+<td style="text-align: right;">7.8</td>
+<td style="text-align: right;">52000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Mavi Magara</td>
+<td style="text-align: left;">2024</td>
+<td style="text-align: right;">88</td>
+<td style="text-align: right;">5.4</td>
+<td style="text-align: right;">4700</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Erdal ile Ece</td>
+<td style="text-align: left;">2024</td>
+<td style="text-align: right;">107</td>
+<td style="text-align: right;">4.3</td>
+<td style="text-align: right;">4000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ahlat Agaci</td>
+<td style="text-align: left;">2018</td>
+<td style="text-align: right;">188</td>
+<td style="text-align: right;">8.0</td>
+<td style="text-align: right;">29000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Istanbul Için Son Çagri</td>
+<td style="text-align: left;">2023</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: right;">5.3</td>
+<td style="text-align: right;">9600</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Dag II</td>
+<td style="text-align: left;">2016</td>
+<td style="text-align: right;">135</td>
+<td style="text-align: right;">8.2</td>
+<td style="text-align: right;">111000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Kurak Günler</td>
+<td style="text-align: left;">2022</td>
+<td style="text-align: right;">129</td>
+<td style="text-align: right;">7.5</td>
+<td style="text-align: right;">13000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Dabbe: Cin Çarpmasi</td>
+<td style="text-align: left;">2013</td>
+<td style="text-align: right;">134</td>
+<td style="text-align: right;">6.8</td>
+<td style="text-align: right;">7900</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mucize</td>
+<td style="text-align: left;">2015</td>
+<td style="text-align: right;">136</td>
+<td style="text-align: right;">7.6</td>
+<td style="text-align: right;">15000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bihter</td>
+<td style="text-align: left;">2023</td>
+<td style="text-align: right;">113</td>
+<td style="text-align: right;">3.6</td>
+<td style="text-align: right;">4100</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Siccîn</td>
+<td style="text-align: left;">2014</td>
+<td style="text-align: right;">96</td>
+<td style="text-align: right;">6.0</td>
+<td style="text-align: right;">5700</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ölümlü Dünya 2</td>
+<td style="text-align: left;">2023</td>
+<td style="text-align: right;">117</td>
+<td style="text-align: right;">6.8</td>
+<td style="text-align: right;">9700</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ölümlü Dünya</td>
+<td style="text-align: left;">2018</td>
+<td style="text-align: right;">107</td>
+<td style="text-align: right;">7.6</td>
+<td style="text-align: right;">33000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Kedi</td>
+<td style="text-align: left;">2016</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: right;">7.6</td>
+<td style="text-align: right;">16000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">The Ottoman Lieutenant</td>
+<td style="text-align: left;">2017</td>
+<td style="text-align: right;">106</td>
+<td style="text-align: right;">6.4</td>
+<td style="text-align: right;">27000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Dag</td>
+<td style="text-align: left;">2012</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: right;">7.5</td>
+<td style="text-align: right;">24000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Av Mevsimi</td>
+<td style="text-align: left;">2010</td>
+<td style="text-align: right;">140</td>
+<td style="text-align: right;">7.4</td>
+<td style="text-align: right;">38000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Do Not Disturb</td>
+<td style="text-align: left;">2023</td>
+<td style="text-align: right;">114</td>
+<td style="text-align: right;">6.3</td>
+<td style="text-align: right;">11000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Okul Tirasi</td>
+<td style="text-align: left;">2021</td>
+<td style="text-align: right;">85</td>
+<td style="text-align: right;">7.3</td>
+<td style="text-align: right;">3500</td>
+</tr>
+</tbody>
+</table>
+</div>
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(imdb_movies_data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Title</th>
+<th style="text-align: left;">Year</th>
+<th style="text-align: right;">Duration</th>
+<th style="text-align: right;">Rate</th>
+<th style="text-align: right;">Vote</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Kuru Otlar Üstüne</td>
+<td style="text-align: left;">2023</td>
+<td style="text-align: right;">197</td>
+<td style="text-align: right;">7.7</td>
+<td style="text-align: right;">16000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Yedinci Kogustaki Mucize</td>
+<td style="text-align: left;">2019</td>
+<td style="text-align: right;">132</td>
+<td style="text-align: right;">8.2</td>
+<td style="text-align: right;">58000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Baskin</td>
+<td style="text-align: left;">2015</td>
+<td style="text-align: right;">97</td>
+<td style="text-align: right;">5.8</td>
+<td style="text-align: right;">13000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Kis Uykusu</td>
+<td style="text-align: left;">2014</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: right;">8.0</td>
+<td style="text-align: right;">57000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Cebimdeki Yabanci</td>
+<td style="text-align: left;">2018</td>
+<td style="text-align: right;">95</td>
+<td style="text-align: right;">6.8</td>
+<td style="text-align: right;">10000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ayla</td>
+<td style="text-align: left;">2017</td>
+<td style="text-align: right;">125</td>
+<td style="text-align: right;">8.2</td>
+<td style="text-align: right;">45000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="my-favorite-movies" class="level1">
+<h1>My Favorite Movies</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>search_film <span class="ot">&lt;-</span> <span class="cf">function</span>(name_of_the_film) {</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> imdb_movies_data[imdb_movies_data<span class="sc">$</span>Title <span class="sc">==</span> name_of_the_film, ]</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">search_film</span>(<span class="st">"Mucize"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Title</th>
+<th style="text-align: left;">Year</th>
+<th style="text-align: right;">Duration</th>
+<th style="text-align: right;">Rate</th>
+<th style="text-align: right;">Vote</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">Mucize</td>
+<td style="text-align: left;">2015</td>
+<td style="text-align: right;">136</td>
+<td style="text-align: right;">7.6</td>
+<td style="text-align: right;">15000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">40</td>
+<td style="text-align: left;">Mucize</td>
+<td style="text-align: left;">2015</td>
+<td style="text-align: right;">136</td>
+<td style="text-align: right;">7.6</td>
+<td style="text-align: right;">15000</td>
+</tr>
+</tbody>
+</table>
+</div>
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">search_film</span>(<span class="st">"Ayla"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Title</th>
+<th style="text-align: left;">Year</th>
+<th style="text-align: right;">Duration</th>
+<th style="text-align: right;">Rate</th>
+<th style="text-align: right;">Vote</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">Ayla</td>
+<td style="text-align: left;">2017</td>
+<td style="text-align: right;">125</td>
+<td style="text-align: right;">8.2</td>
+<td style="text-align: right;">45000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">31</td>
+<td style="text-align: left;">Ayla</td>
+<td style="text-align: left;">2017</td>
+<td style="text-align: right;">125</td>
+<td style="text-align: right;">8.2</td>
+<td style="text-align: right;">45000</td>
+</tr>
+</tbody>
+</table>
+</div>
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">search_film</span>(<span class="st">"Ahlat Agaci"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Title</th>
+<th style="text-align: left;">Year</th>
+<th style="text-align: right;">Duration</th>
+<th style="text-align: right;">Rate</th>
+<th style="text-align: right;">Vote</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">Ahlat Agaci</td>
+<td style="text-align: left;">2018</td>
+<td style="text-align: right;">188</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">29000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">35</td>
+<td style="text-align: left;">Ahlat Agaci</td>
+<td style="text-align: left;">2018</td>
+<td style="text-align: right;">188</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">29000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="visualising-data" class="level1">
+<h1>Visualising Data</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>updated_imdb_movies_data <span class="ot">&lt;-</span> imdb_movies_data <span class="sc">|&gt;</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">|&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Mean_Rate =</span> <span class="fu">mean</span>(Rate), <span class="at">Total_Film_Numbers =</span> <span class="fu">n</span>())</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>plot_mean_rate_per_year_point <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(updated_imdb_movies_data, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Mean_Rate)) <span class="sc">+</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>plot_mean_rate_per_year_point</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="assignment-2_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -1,5 +1,229 @@
 ---
 title: "Assignment 2"
+execute: 
+  warning: false
+  message: false
+  echo: false
 ---
 
+# Library Preparation
+```{r}
+library(tidyverse)
+library(rvest)
+library(stringr)
+library(ggplot2)
+library(knitr)
+```
+
+# Create URL
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Show code"
+url1 <- c("https://m.imdb.com/search/title/?title_type=feature&release_date=2010-01-01,&num_votes=2500,&country_of_origin=TR&count=250")
+url2 <- "https://m.imdb.com/search/title/?title_type=feature&release_date=2010-01-01,2024-12-31&num_votes=2499,&country_of_origin=TR&count=250"
+
+```
+
+
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Show code"
+page1 <- read_html(url1)
+page2 <- read_html(url2)
+
+```
+
+
+# html_nodes and html_text
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Show code"
+titles1 <- page1 |> html_nodes(".ipc-title__text") |> html_text()
+titles2 <- page2 |> html_nodes(".ipc-title__text") |> html_text()
+titles1 <- page1 |> html_nodes(".dli-title") |> html_text()
+titles2 <- page2 |> html_nodes(".dli-title") |> html_text()
+
+
+years1 <- page1 |> html_nodes(".dli-title-metadata-item:nth-child(1)") |> html_text()
+years2 <- page2 |> html_nodes(".dli-title-metadata-item:nth-child(1)") |> html_text()
+
+
+durations1 <- page1 |> html_nodes(".dli-title-metadata-item:nth-child(2)") |> html_text()
+durations2 <- page2 |> html_nodes(".dli-title-metadata-item:nth-child(2)") |> html_text()
+
+
+ratings1 <- page1 |> html_nodes(".ratingGroup--imdb-rating") |> html_text()
+ratings2 <- page2 |> html_nodes(".ratingGroup--imdb-rating") |> html_text()
+
+
+votes1 <- page1 |> html_nodes(".ipc-rating-star--voteCount") |> html_text()
+votes2 <- page2 |> html_nodes(".ipc-rating-star--voteCount") |> html_text()
+
+combined_titles <- c(titles1, titles2)
+combined_years <- c(years1, years2)
+combined_durations <- c(durations1, durations2)
+combined_ratings <- c(ratings1, ratings2)
+combined_votes <- c(votes1, votes2)
+```
+
+# Outputs
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Show code"
+combined_titles
+combined_years
+combined_durations
+combined_ratings
+combined_votes
+```
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Show code"
+title_names1 <- page1 |> html_nodes('.ipc-title__text')
+title_names1 <- html_text(title_names1)
+title_names1 <- tail(head(title_names1,-1),-1)
+title_names1 <- str_split(title_names1, " ", n=2)
+title_names1 <- unlist(lapply(title_names1, function(x) {x[2]}))
+
+title_names2 <- page2 |> html_nodes('.ipc-title__text')
+title_names2 <- html_text(title_names2)
+title_names2 <- tail(head(title_names2,-1),-1)
+title_names2 <- str_split(title_names2, " ", n=2)
+title_names2 <- unlist(lapply(title_names2, function(x) {x[2]}))
+
+combined_title_names <- c(title_names1, title_names2)
+combined_title_names <- gsub("^[\\s]+|\\s+$", "", combined_title_names) # I got help from ChatGDP
+Sys.setlocale("LC_ALL", "Turkish") # I got help from ChatGDP
+```
+
+# For Durations
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Show code"
+hours1 <- as.integer(str_extract(durations1, "\\d+(?=h)"))  
+minutes1 <- as.integer(str_extract(durations1, "\\d+(?=m)"))  
+
+hours1[is.na(hours1)] <- as.integer("0")     
+minutes1[is.na(minutes1)] <- as.integer("0") 
+
+
+total_duration_minutes1 <- (hours1 * 60) + minutes1
+
+
+hours2 <- as.integer(str_extract(durations2, "\\d+(?=h)"))
+minutes2 <- as.integer(str_extract(durations2, "\\d+(?=m)"))
+
+hours2[is.na(hours2)] <- as.integer("0")
+minutes2[is.na(minutes2)] <- as.integer("0")
+
+total_duration_minutes2 <- (hours2 * 60) + minutes2
+
+
+combined_durations <- c(total_duration_minutes1 , total_duration_minutes2)
+print(combined_durations)
+```
+
+# For Votes
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Show code"
+votes1 <- page1 |> html_nodes(".ipc-rating-star--voteCount") |> html_text()
+votes2 <- page2 |> html_nodes(".ipc-rating-star--voteCount") |> html_text()
+
+# From ChatGPT :
+votes1 <- str_replace_all(votes1, "[()]", "")
+votes2 <- str_replace_all(votes2, "[()]", "")
+
+# From ChatGPT :
+votes1 <- str_remove_all(votes1, "[^0-9.K]")
+votes2 <- str_remove_all(votes2, "[^0-9.K]")
+
+
+votes_numeric1 <- str_remove_all(votes1, "K") |> as.numeric() * 1000
+votes_numeric2 <- str_remove_all(votes2, "K") |> as.numeric() * 1000
+
+combined_votes <- c(votes_numeric1 , votes_numeric2)
+print(combined_votes)
+```
+
+# For Ratings
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Show code"
+combined_ratings <- c(ratings1, ratings2)
+print(combined_ratings)
+
+
+rating_no_parant1 <- str_replace_all(combined_ratings, "\\(.*\\)", "")
+rating_no_parant_no_space <- str_trim(str_extract(rating_no_parant1, "^\\d+\\.?\\d*"))
+
+
+combined_ratings <- as.double(rating_no_parant_no_space)
+combined_ratings
+```
+
+# Data Frame
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Show code"
+imdb_movies_data <- data.frame(Title = combined_title_names, 
+                               Year = combined_years, 
+                               Duration = combined_durations,
+                               Rate = combined_ratings,
+                               Vote = combined_votes)
+
+kable(imdb_movies_data)
+kable(head(imdb_movies_data))
+```
+# My Favorite Movies
+```{r}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Show code"
+
+search_film <- function(name_of_the_film) {
+  result <- imdb_movies_data[imdb_movies_data$Title == name_of_the_film, ]
+  return(result)
+}
+
+kable(search_film("Mucize"))
+kable(search_film("Ayla"))
+kable(search_film("Ahlat Agaci"))
+``` 
+
+# Visualising Data
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Show code"
+#| 
+updated_imdb_movies_data <- imdb_movies_data |> 
+  group_by(Year) |>
+  mutate(Mean_Rate = mean(Rate), Total_Film_Numbers = n())
+
+plot_mean_rate_per_year_point <- ggplot(updated_imdb_movies_data, aes(x = Year, y = Mean_Rate)) +
+  geom_point() +
+  geom_boxplot()
+
+plot_mean_rate_per_year_point
+```
 
